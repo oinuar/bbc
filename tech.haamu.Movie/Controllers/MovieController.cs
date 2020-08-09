@@ -1,28 +1,54 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using tech.haamu.Movie.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace tech.haamu.Movie.Controllers
 {
     [ApiController]
+    [User]
     [Route("[controller]")]
     public class MovieController : ControllerBase
     {
-        [Route("[action]/{id}")]
-        public Task<string> Like(int id)
+        private readonly IMovieLibrary movieLibrary;
+        private readonly Users users;
+
+        public MovieController(IMovieLibrary movieLibrary, Users users)
         {
-            return Task.FromResult("I like " + id);
+            this.movieLibrary = movieLibrary;
+            this.users = users;
         }
 
         [Route("[action]/{id}")]
-        public Task<string> Dislike(int id)
+        public async Task Like(string id)
         {
-            return Task.FromResult("I don't like " + id);
+            var movie = await movieLibrary.GetById(id);
+            var user = users.GetById(this.GetUserId());
+
+            users.AddLikedMovie(user, movie);
+        }
+
+        [Route("[action]/{id}")]
+        public async Task Dislike(string id)
+        {
+            var movie = await movieLibrary.GetById(id);
+            var user = users.GetById(this.GetUserId());
+
+            users.RemoveLikedMovie(user, movie);
         }
 
         [Route("[action]")]
-        public Task<string> Recommend([FromQuery] int limit, [FromQuery] int offset = 0)
+        public Task<IReadOnlyList<Models.Movie>> Recommend([FromQuery] int limit, [FromQuery] int offset = 0)
         {
-            return Task.FromResult("I recommend " + limit + ", " + offset);
+            var user = users.GetById(this.GetUserId());
+
+            var likedGenres = user.LikedMovies
+                .AsQueryable()
+                .SelectMany(x => x.Genres)
+                .Distinct();
+
+            return movieLibrary.GetMoviesByGenres(likedGenres, limit, offset);
         }
     }
 }

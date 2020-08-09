@@ -22,19 +22,23 @@ namespace tech.haamu.Movie.UnitTest.Services
                 .Returns(movies.Object);
 
             movies
-                .Setup(x => x.Add(It.Is<Movie.Models.Movie>(y => y.Id == "tt0071562" && new[] { "Crime", "Drama" }.SequenceEqual(y.Genres) && y.Name == "The Godfather: Part II")))
+                .Setup(x => x.Add(It.Is<Movie.Models.Movie>(y => y.Id == "tt0118715" && new[] { "Comedy", "Crime", "Sport" }.SequenceEqual(y.Genres) && y.Name == "The Big Lebowski")))
                 .Returns(movies.Object);
 
             movies
-                .Setup(x => x.Add(It.Is<Movie.Models.Movie>(y => y.Id == "tt0468569" && new[] { "Action", "Crime", "Drama" }.SequenceEqual(y.Genres) && y.Name == "The Dark Knight")))
+                .Setup(x => x.Add(It.Is<Movie.Models.Movie>(y => y.Id == "tt0848228" && new[] { "Action", "Adventure", "Sci-Fi" }.SequenceEqual(y.Genres) && y.Name == "The Avengers")))
                 .Returns(movies.Object);
 
             movies
-                .Setup(x => x.Add(It.Is<Movie.Models.Movie>(y => y.Id == "tt0050083" && new[] { "Crime", "Drama" }.SequenceEqual(y.Genres) && y.Name == "12 Angry Men")))
+                .Setup(x => x.Add(It.Is<Movie.Models.Movie>(y => y.Id == "tt0088763" && new[] { "Adventure", "Comedy", "Sci-fi" }.SequenceEqual(y.Genres) && y.Name == "Back to the Future")))
                 .Returns(movies.Object);
 
             movies
-                .Setup(x => x.Add(It.Is<Movie.Models.Movie>(y => y.Id == "tt0108052" && new[] { "Biography", "Drama", "History" }.SequenceEqual(y.Genres) && y.Name == "Schindler's List")))
+                .Setup(x => x.Add(It.Is<Movie.Models.Movie>(y => y.Id == "tt2527336" && new[] { "Action", "Adventure", "Fantasy" }.SequenceEqual(y.Genres) && y.Name == "Star Wars: Episode VIII - The Last Jedi")))
+                .Returns(movies.Object);
+
+            movies
+                .Setup(x => x.Add(It.Is<Movie.Models.Movie>(y => y.Id == "tt0163651" && new[] { "Comedy" }.SequenceEqual(y.Genres) && y.Name == "American Pie")))
                 .Returns(movies.Object);
 
             var movieLibrary = new IMDBMovieLibrary(movies.Object);

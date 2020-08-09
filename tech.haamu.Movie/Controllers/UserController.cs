@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace tech.haamu.Movie.Controllers
 {
@@ -20,12 +19,12 @@ namespace tech.haamu.Movie.Controllers
         }
 
         [Route("[action]/{id}")]
-        public Task<string> Token(int id)
+        public string Token(string id)
         {
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, "Dummy user"),
-                new Claim(JwtRegisteredClaimNames.Jti, id.ToString())
+                new Claim("userId", id)
             };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]));
@@ -38,7 +37,7 @@ namespace tech.haamu.Movie.Controllers
                 signingCredentials: credentials
             );
 
-            return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(jwt));
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
     }
 }

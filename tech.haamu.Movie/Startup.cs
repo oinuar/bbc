@@ -23,6 +23,7 @@ namespace tech.haamu.Movie
         {
             services.AddControllers();
             services.AddIMDBMovieLibrary();
+            services.AddUsers();
             services.AddDataModels();
             services.AddInMemoryUnitOfWork();
 

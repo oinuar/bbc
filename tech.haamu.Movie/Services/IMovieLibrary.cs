@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace tech.haamu.Movie.Services
 {
+    /// <summary>
+    /// An interface that represents a movie library.
+    /// </summary>
     public interface IMovieLibrary
     {
         /// <summary>

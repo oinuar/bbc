@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -6,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace tech.haamu.Movie.Services
 {
+    /// <summary>
+    /// A service class that handles movie library operations in-memory.
+    /// </summary>
     public class InMemoryMovieLibrary : IMovieLibrary
     {
         public readonly IImmutableSet<Models.Movie> movies;
@@ -17,6 +21,11 @@ namespace tech.haamu.Movie.Services
 
         public Task<Models.Movie> GetById(string movieId, CancellationToken cancellationToken = default)
         {
+            if (movieId == null)
+                throw new ArgumentNullException(nameof(movieId));
+
+            // Attempt to retrieve a movie by ID. We don't care the return value since movie is null if
+            // it cannot be found.
             movies.TryGetValue(new Models.Movie { Id = movieId }, out var movie);
 
             return Task.FromResult(movie);
@@ -24,13 +33,24 @@ namespace tech.haamu.Movie.Services
 
         public Task<IReadOnlyList<Models.Movie>> GetMoviesByGenres(IEnumerable<string> genres, int limit, int offset = 0, CancellationToken cancellationToken = default)
         {
+            if (genres == null)
+                throw new ArgumentNullException(nameof(genres));
+
+            // Make genres a lookup to speed up existence checks from O(n) to O(1).
             var lookup = genres.ToLookup(x => x);
 
             var results = movies
+                // Take the movies that contain at least some of the given genres.
                 .Where(x => x.Genres.Any(lookup.Contains))
+
+                // Order results by ID.
                 .OrderBy(x => x.Id)
+
+                // Add pagination support.
                 .Skip(offset)
                 .Take(limit)
+
+                // Convert it to list to force execution of the enumerator.
                 .ToList();
 
             return Task.FromResult((IReadOnlyList<Models.Movie>)results);

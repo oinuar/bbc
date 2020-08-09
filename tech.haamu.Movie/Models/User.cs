@@ -2,7 +2,7 @@
 
 namespace tech.haamu.Movie.Models
 {
-    public class User : IdModel<int>
+    public class User : IdModel<string>
     {
         /// <summary>
         /// Genres that user has liked.

@@ -6,6 +6,10 @@ using System.Collections.Immutable;
 
 namespace tech.haamu.Movie
 {
+    /// <summary>
+    /// An extension class that extens IServiceCollection to provide additional registration
+    /// methods for dependency injection.
+    /// </summary>
     public static class IServiceCollectionExtension
     {
         /// <summary>
@@ -15,7 +19,7 @@ namespace tech.haamu.Movie
         /// <returns>The service collection that has a IMDB movie library registered.</returns>
         public static IServiceCollection AddIMDBMovieLibrary(this IServiceCollection services)
         {
-            return services.AddSingleton<IMovieLibrary, IMDBMovieLibrary>();
+            return services.AddScoped<IMovieLibrary, IMDBMovieLibrary>();
         }
 
         /* To change the movie library backend to, for example, Netflix, do this:
@@ -30,6 +34,16 @@ namespace tech.haamu.Movie
          *  
          * 3. Call the method in Startup.cs.
         */
+
+        /// <summary>
+        /// Registers in-memory unit of work.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        /// <returns>The service collection that has an in-memory unit of work registered.</returns>
+        public static IServiceCollection AddUsers(this IServiceCollection services)
+        {
+            return services.AddScoped<Users>();
+        }
 
         /// <summary>
         /// Registers in-memory unit of work.
@@ -52,7 +66,7 @@ namespace tech.haamu.Movie
         {
             return services
                 .AddSingleton<IEqualityComparer<Models.Movie>>(x => new IdModel<string>.Comparer<Models.Movie>())
-                .AddSingleton<IEqualityComparer<User>>(x => new IdModel<int>.Comparer<User>())
+                .AddSingleton<IEqualityComparer<User>>(x => new IdModel<string>.Comparer<User>())
 
                 .AddSingleton<IImmutableSet<Models.Movie>>(x =>
                     ImmutableHashSet<Models.Movie>.Empty.WithComparer(x.GetRequiredService<IEqualityComparer<Models.Movie>>()));
