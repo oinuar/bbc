@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace tech.haamu.Movie.Services
@@ -9,8 +10,9 @@ namespace tech.haamu.Movie.Services
         /// Gets a movie by ID.
         /// </summary>
         /// <param name="movieId">Movie ID to get.</param>
+        /// <param name="cancellationToken">A cancellation token that is capable of cancelling the asynchronous operation.</param>
         /// <returns>Asynchronous result that completes when the movie is retrieved.</returns>
-        public Task<Models.Movie> GetById(int movieId);
+        public Task<Models.Movie> GetById(string movieId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets movies by genres.
@@ -21,7 +23,8 @@ namespace tech.haamu.Movie.Services
         /// <param name="genres">Allowed genres.</param>
         /// <param name="limit">Sets the maximum amount of returned movie results.</param>
         /// <param name="offset">Sets result offset.</param>
+        /// <param name="cancellationToken">A cancellation token that is capable of cancelling the asynchronous operation.</param>
         /// <returns>Asynchronous result that completes when a list of movies are retrieved.</returns>
-        public Task<IList<Models.Movie>> GetMoviesByGenres(IEnumerable<string> genres, int limit, int offset = 0);
+        public Task<IReadOnlyList<Models.Movie>> GetMoviesByGenres(IEnumerable<string> genres, int limit, int offset = 0, CancellationToken cancellationToken = default);
     }
 }
