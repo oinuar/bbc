@@ -1,13 +1,14 @@
-﻿using Xunit;
+﻿using tech.haamu.Movie.Models;
+using Xunit;
 
 namespace tech.haamu.Movie.UnitTest.Models
 {
-    public class MovieTest
+    public class IdModelTest
     {
         [Fact]
         public void Comparer_Equals_NullNull()
         {
-            var comparer = new Movie.Models.Movie.Comparer();
+            var comparer = new IdModel<int>.Comparer<IdModel<int>>();
 
             var result = comparer.Equals(null, null);
 
@@ -17,9 +18,9 @@ namespace tech.haamu.Movie.UnitTest.Models
         [Fact]
         public void Comparer_Equals_XNull()
         {
-            var comparer = new Movie.Models.Movie.Comparer();
+            var comparer = new IdModel<int>.Comparer<IdModel<int>>();
 
-            var result = comparer.Equals(new Movie.Models.Movie(), null);
+            var result = comparer.Equals(new IdModel<int>(), null);
 
             Assert.False(result);
         }
@@ -27,9 +28,9 @@ namespace tech.haamu.Movie.UnitTest.Models
         [Fact]
         public void Comparer_Equals_NullX()
         {
-            var comparer = new Movie.Models.Movie.Comparer();
+            var comparer = new IdModel<int>.Comparer<IdModel<int>>();
 
-            var result = comparer.Equals(null, new Movie.Models.Movie());
+            var result = comparer.Equals(null, new IdModel<int>());
 
             Assert.False(result);
         }
@@ -37,9 +38,9 @@ namespace tech.haamu.Movie.UnitTest.Models
         [Fact]
         public void Comparer_Equals_True()
         {
-            var comparer = new Movie.Models.Movie.Comparer();
+            var comparer = new IdModel<int>.Comparer<IdModel<int>>();
 
-            var result = comparer.Equals(new Movie.Models.Movie { Id = "1" }, new Movie.Models.Movie { Id = "1" });
+            var result = comparer.Equals(new IdModel<int> { Id = 1 }, new IdModel<int> { Id = 1 });
 
             Assert.True(result);
         }
@@ -47,9 +48,9 @@ namespace tech.haamu.Movie.UnitTest.Models
         [Fact]
         public void Comparer_Equals_False()
         {
-            var comparer = new Movie.Models.Movie.Comparer();
+            var comparer = new IdModel<int>.Comparer<IdModel<int>>();
 
-            var result = comparer.Equals(new Movie.Models.Movie { Id = "1" }, new Movie.Models.Movie { Id = "2" });
+            var result = comparer.Equals(new IdModel<int> { Id = 1 }, new IdModel<int> { Id = 2 });
 
             Assert.False(result);
         }
@@ -57,8 +58,8 @@ namespace tech.haamu.Movie.UnitTest.Models
         [Fact]
         public void Comparer_GetHashCode()
         {
-            var comparer = new Movie.Models.Movie.Comparer();
-            var movie = new Movie.Models.Movie { Id = "1" };
+            var comparer = new IdModel<int>.Comparer<IdModel<int>>();
+            var movie = new IdModel<int> { Id = 1 };
 
             var result = comparer.GetHashCode(movie);
 

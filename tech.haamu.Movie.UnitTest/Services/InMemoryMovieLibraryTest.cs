@@ -1,4 +1,5 @@
-﻿using tech.haamu.Movie.Services;
+﻿using tech.haamu.Movie.Models;
+using tech.haamu.Movie.Services;
 using Moq;
 using System.Collections.Immutable;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace tech.haamu.Movie.UnitTest.Services
         [Fact]
         public async Task GetMoviesByGenres_Genres()
         {
-            var movies = ImmutableHashSet<Movie.Models.Movie>.Empty.WithComparer(new Movie.Models.Movie.Comparer())
+            var movies = ImmutableHashSet<Movie.Models.Movie>.Empty.WithComparer(new IdModel<string>.Comparer<Movie.Models.Movie>())
                 .Add(new Movie.Models.Movie { Id = "unit test movie id 1", Genres = new[] { "unit test genre 1" } })
                 .Add(new Movie.Models.Movie { Id = "unit test movie id 2", Genres = new[] { "unit test genre 1", "unit test genre 2" } })
                 .Add(new Movie.Models.Movie { Id = "unit test movie id 3", Genres = new[] { "unit test genre 2" } });
@@ -46,7 +47,7 @@ namespace tech.haamu.Movie.UnitTest.Services
         [Fact]
         public async Task GetMoviesByGenres_Limit()
         {
-            var movies = ImmutableHashSet<Movie.Models.Movie>.Empty.WithComparer(new Movie.Models.Movie.Comparer())
+            var movies = ImmutableHashSet<Movie.Models.Movie>.Empty.WithComparer(new IdModel<string>.Comparer<Movie.Models.Movie>())
                 .Add(new Movie.Models.Movie { Id = "unit test movie id 1", Genres = new[] { "unit test genre" } })
                 .Add(new Movie.Models.Movie { Id = "unit test movie id 2", Genres = new[] { "unit test genre" } })
                 .Add(new Movie.Models.Movie { Id = "unit test movie id 3", Genres = new[] { "unit test genre" } });
@@ -61,7 +62,7 @@ namespace tech.haamu.Movie.UnitTest.Services
         [Fact]
         public async Task GetMoviesByGenres_LimitOffset()
         {
-            var movies = ImmutableHashSet<Movie.Models.Movie>.Empty.WithComparer(new Movie.Models.Movie.Comparer())
+            var movies = ImmutableHashSet<Movie.Models.Movie>.Empty.WithComparer(new IdModel<string>.Comparer<Movie.Models.Movie>())
                 .Add(new Movie.Models.Movie { Id = "unit test movie id 1", Genres = new[] { "unit test genre" } })
                 .Add(new Movie.Models.Movie { Id = "unit test movie id 2", Genres = new[] { "unit test genre" } })
                 .Add(new Movie.Models.Movie { Id = "unit test movie id 3", Genres = new[] { "unit test genre" } });

@@ -19,6 +19,9 @@ namespace tech.haamu.Movie
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddIMDBMovieLibrary();
+            services.AddDataModels();
+            services.AddInMemoryUnitOfWork();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
