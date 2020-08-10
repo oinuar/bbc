@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace tech.haamu.Movie.IntegrationTest
             });
         }
 
-        private void ThenListAMovieIfTheMoviesGenresContainAnyOfTheExtractedGenres()
+        private void ThenSearchMoviesFromAMovieLibraryAndListAMovieIfTheMoviesGenresContainAnyOfTheExtractedGenresAndFilterOutMoviesThatUserHasLikedAlready()
         {
             Assert.Equal(JsonSerializer.Serialize(new[] {
                 new Models.Movie { Id = "tt0068646", Genres = new[] { "Crime", "Drama" }, Name = "The Godfather" },
@@ -61,20 +62,27 @@ namespace tech.haamu.Movie.IntegrationTest
         }
 
         [Fact]
-        public void Scenario()
+        public Task Scenario()
         {
+            // Set timeout to 30 seconds.
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
+            // Build a hosting service for the web server.
             host = Host.CreateDefaultBuilder()
                 .ConfigureWebHostDefaults(webBuilder => 
                 {
                     webBuilder.UseStartup<Startup>();
                 }).Build();
 
-            Assert.True(ThreadPool.QueueUserWorkItem(async s => await host.RunAsync(cts.Token)));
+            // Execute the test when the application is started, and then shutdown the application.
+            host.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStarted.Register(() =>
+            {
+                this.BDDfy();
+                cts.Cancel();
+            });
 
-            this.BDDfy();
-            cts.Cancel();
+            // Run the application.
+            return host.RunAsync(cts.Token);
         }
     }
 }

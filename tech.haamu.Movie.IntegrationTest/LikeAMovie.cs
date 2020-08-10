@@ -46,20 +46,27 @@ namespace tech.haamu.Movie.IntegrationTest
         }
 
         [Fact]
-        public void Scenario()
+        public Task Scenario()
         {
+            // Set timeout to 30 seconds.
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
 
+            // Build a hosting service for the web server.
             host = Host.CreateDefaultBuilder()
-                .ConfigureWebHostDefaults(webBuilder => 
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 }).Build();
 
-            Assert.True(ThreadPool.QueueUserWorkItem(async s => await host.RunAsync(cts.Token)));
+            // Execute the test when the application is started, and then shutdown the application.
+            host.Services.GetRequiredService<IHostApplicationLifetime>().ApplicationStarted.Register(() =>
+            {
+                this.BDDfy();
+                cts.Cancel();
+            });
 
-            this.BDDfy();
-            cts.Cancel();
+            // Run the application.
+            return host.RunAsync(cts.Token);
         }
     }
 }
