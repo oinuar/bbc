@@ -51,9 +51,7 @@ namespace tech.haamu.Movie.IntegrationTest
             Assert.Equal(JsonSerializer.Serialize(new[] {
                 new Models.Movie { Id = "tt0068646", Genres = new[] { "Crime", "Drama" }, Name = "The Godfather" },
                 new Models.Movie { Id = "tt0088763", Genres = new[] { "Adventure", "Comedy", "Sci-fi" }, Name = "Back to the Future" },
-                new Models.Movie { Id = "tt0111161", Genres = new[] { "Drama" }, Name = "The Shawshank Redemption" },
-                new Models.Movie { Id = "tt0118715", Genres = new[] { "Comedy", "Crime", "Sport" }, Name = "The Big Lebowski" },
-                new Models.Movie { Id = "tt0163651", Genres = new[] { "Comedy" }, Name = "American Pie" }
+                new Models.Movie { Id = "tt0118715", Genres = new[] { "Comedy", "Crime", "Sport" }, Name = "The Big Lebowski" }
             }), JsonSerializer.Serialize(recommendations));
         }
 

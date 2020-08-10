@@ -3,6 +3,8 @@ using tech.haamu.Movie.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
@@ -106,7 +108,8 @@ namespace tech.haamu.Movie.UnitTest.Controllers
             };
 
             movieLibrary
-                .Setup(x => x.GetMoviesByGenres(new[] { "unit test genre 1", "unit test genre 2" }, 1000, 11, default))
+                .Setup(x => x.GetMoviesByGenres(new[] { "unit test genre 1", "unit test genre 2" },
+                    It.Is<IEnumerable<string>>(y => user.LikedMovies.Select(x => x.Id).SequenceEqual(y)), 1000, 11, default))
                 .ReturnsAsync(new[] { movie });
 
             users

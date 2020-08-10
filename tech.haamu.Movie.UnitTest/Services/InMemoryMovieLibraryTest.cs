@@ -39,9 +39,29 @@ namespace tech.haamu.Movie.UnitTest.Services
 
             var movieLibrary = new InMemoryMovieLibrary(movies);
 
-            var result = await movieLibrary.GetMoviesByGenres(new[] { "unit test genre 2" }, int.MaxValue);
+            var result = await movieLibrary.GetMoviesByGenres(new[] { "unit test genre 2" }, Enumerable.Empty<string>(), int.MaxValue);
 
             Assert.Equal(movies.OrderBy(x => x.Id).Skip(1), result);
+        }
+
+        [Fact]
+        public async Task GetMoviesByGenres_Exclusions()
+        {
+            var movies = ImmutableHashSet<Movie.Models.Movie>.Empty.WithComparer(new IdModel<string>.Comparer<Movie.Models.Movie>())
+                .Add(new Movie.Models.Movie { Id = "unit test movie id 1", Genres = new[] { "unit test genre 1" } })
+                .Add(new Movie.Models.Movie { Id = "unit test movie id 2", Genres = new[] { "unit test genre 1", "unit test genre 2" } })
+                .Add(new Movie.Models.Movie { Id = "unit test movie id 3", Genres = new[] { "unit test genre 2" } });
+
+            var excludedMovieIds = new[]
+            {
+                "unit test movie id 2"
+            };
+
+            var movieLibrary = new InMemoryMovieLibrary(movies);
+
+            var result = await movieLibrary.GetMoviesByGenres(new[] { "unit test genre 2" }, excludedMovieIds, int.MaxValue);
+
+            Assert.Equal(movies.OrderBy(x => x.Id).Skip(2), result);
         }
 
         [Fact]
@@ -54,7 +74,7 @@ namespace tech.haamu.Movie.UnitTest.Services
 
             var movieLibrary = new InMemoryMovieLibrary(movies);
 
-            var result = await movieLibrary.GetMoviesByGenres(new[] { "unit test genre" }, 2);
+            var result = await movieLibrary.GetMoviesByGenres(new[] { "unit test genre" }, Enumerable.Empty<string>(), 2);
 
             Assert.Equal(movies.OrderBy(x => x.Id).Take(2), result);
         }
@@ -69,7 +89,7 @@ namespace tech.haamu.Movie.UnitTest.Services
 
             var movieLibrary = new InMemoryMovieLibrary(movies);
 
-            var result = await movieLibrary.GetMoviesByGenres(new[] { "unit test genre" }, 2, 1);
+            var result = await movieLibrary.GetMoviesByGenres(new[] { "unit test genre" }, Enumerable.Empty<string>(), 2, 1);
 
             Assert.Equal(movies.OrderBy(x => x.Id).Skip(1).Take(2), result);
         }

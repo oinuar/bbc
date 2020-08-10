@@ -31,7 +31,7 @@ namespace tech.haamu.Movie.Services
             return Task.FromResult(movie);
         }
 
-        public Task<IReadOnlyList<Models.Movie>> GetMoviesByGenres(IEnumerable<string> genres, int limit, int offset = 0, CancellationToken cancellationToken = default)
+        public Task<IReadOnlyList<Models.Movie>> GetMoviesByGenres(IEnumerable<string> genres, IEnumerable<string> excludedMovieIds, int limit, int offset = 0, CancellationToken cancellationToken = default)
         {
             if (genres == null)
                 throw new ArgumentNullException(nameof(genres));
@@ -39,9 +39,12 @@ namespace tech.haamu.Movie.Services
             // Make genres a lookup to speed up existence checks from O(n) to O(1).
             var lookup = genres.ToLookup(x => x);
 
+            // Make excluded movies a lookup to speed up existence checks from O(n) to O(1).
+            var exclusions = excludedMovieIds.ToLookup(x => x);
+
             var results = movies
-                // Take the movies that contain at least some of the given genres.
-                .Where(x => x.Genres.Any(lookup.Contains))
+                // Take the movies that contain at least some of the given genres and that have not been excluded.
+                .Where(x => x.Genres.Any(lookup.Contains) && !exclusions.Contains(x.Id))
 
                 // Order results by ID.
                 .OrderBy(x => x.Id)

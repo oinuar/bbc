@@ -43,12 +43,16 @@ namespace tech.haamu.Movie.Controllers
         {
             var user = users.GetById(this.GetUserId());
 
-            var likedGenres = (user.LikedMovies ?? Enumerable.Empty<Models.Movie>())
+            var likedMovies = (user.LikedMovies ?? Enumerable.Empty<Models.Movie>());
+
+            var likedGenres = likedMovies
                 .AsQueryable()
                 .SelectMany(x => x.Genres)
                 .Distinct();
 
-            return movieLibrary.GetMoviesByGenres(likedGenres, limit, offset);
+            var likedMovieIds = likedMovies.Select(x => x.Id);
+
+            return movieLibrary.GetMoviesByGenres(likedGenres, likedMovieIds, limit, offset);
         }
     }
 }
