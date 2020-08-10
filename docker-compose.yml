@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+   app:
+      image: tech-haamu-movie:${VERSION:-latest}
+      restart: unless-stopped
+      build: .
+      ports:
+         - "5000:80"
+      volumes:
+         - "./tech.haamu.Movie:/src/tech.haamu.Movie"
+      networks:
+         - overlay
+
+   unit-test:
+      build:
+         context: .
+         target: unit-test
+      volumes:
+         - "./tech.haamu.Movie:/src/tech.haamu.Movie"
+         - "./tech.haamu.Movie.UnitTest:/src/tech.haamu.Movie.UnitTest"
+      networks:
+         - overlay
+
+   integration-test:
+      build:
+         context: .
+         target: integration-test
+      volumes:
+         - "./tech.haamu.Movie:/src/tech.haamu.Movie"
+         - "./tech.haamu.Movie.IntegrationTest:/src/tech.haamu.Movie.IntegrationTest"
+      networks:
+         - overlay
+
+networks:
+   overlay:
