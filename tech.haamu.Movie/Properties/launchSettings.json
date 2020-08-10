@@ -29,7 +29,7 @@
     "Docker": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/movie",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/user/token/1",
       "publishAllPorts": true
     }
   }
