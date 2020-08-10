@@ -13,7 +13,7 @@ using tech.haamu.Movie.Services;
 
 namespace tech.haamu.Movie.IntegrationTest
 {
-    public class DislikeAMovie
+    public class LikeAMovie
     {
         private readonly HttpClient httpClient;
         private IHost host;
@@ -25,16 +25,9 @@ namespace tech.haamu.Movie.IntegrationTest
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
-        private async Task AndUserHasLikedTheMovie()
+        private async Task WhenUserLikesAMovie()
         {
             var response = await httpClient.PostAsync("http://localhost:5000/movie/like/tt0118715", null);
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
-
-        private async Task WhenUserDislikesAMovie()
-        {
-            var response = await httpClient.PostAsync("http://localhost:5000/movie/dislike/tt0118715", null);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
@@ -44,10 +37,10 @@ namespace tech.haamu.Movie.IntegrationTest
             var users = host.Services.GetRequiredService<Users>();
             var user = users.GetById("1");
 
-            Assert.Empty(user.LikedMovies);
+            Assert.Collection(user.LikedMovies, x => Assert.Equal("tt0118715", x.Id));
         }
 
-        public DislikeAMovie()
+        public LikeAMovie()
         {
             httpClient = new HttpClient();
         }
