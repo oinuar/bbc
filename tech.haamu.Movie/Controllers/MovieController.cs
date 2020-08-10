@@ -43,7 +43,7 @@ namespace tech.haamu.Movie.Controllers
         {
             var user = users.GetById(this.GetUserId());
 
-            var likedGenres = user.LikedMovies
+            var likedGenres = (user.LikedMovies ?? Enumerable.Empty<Models.Movie>())
                 .AsQueryable()
                 .SelectMany(x => x.Genres)
                 .Distinct();
