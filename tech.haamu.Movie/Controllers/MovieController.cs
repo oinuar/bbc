@@ -21,6 +21,7 @@ namespace tech.haamu.Movie.Controllers
         }
 
         [Route("[action]/{id}")]
+        [HttpPost]
         public async Task Like(string id)
         {
             var movie = await movieLibrary.GetById(id);
@@ -30,6 +31,7 @@ namespace tech.haamu.Movie.Controllers
         }
 
         [Route("[action]/{id}")]
+        [HttpPost]
         public async Task Dislike(string id)
         {
             var movie = await movieLibrary.GetById(id);
