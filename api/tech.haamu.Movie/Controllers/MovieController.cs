@@ -20,6 +20,11 @@ namespace tech.haamu.Movie.Controllers
             this.users = users;
         }
 
+        public Task<IReadOnlyList<Models.Movie>> Index([FromQuery] int limit, [FromQuery] int offset = 0)
+        {
+            return movieLibrary.GetAll(limit, offset);
+        }
+
         [Route("[action]/{id}")]
         [HttpPost]
         public async Task Like(string id)
@@ -41,7 +46,7 @@ namespace tech.haamu.Movie.Controllers
         }
 
         [Route("[action]")]
-        public Task<IReadOnlyList<Models.Movie>> Recommend([FromQuery] int limit, [FromQuery] int offset = 0)
+        public Task<IReadOnlyList<Models.Movie>> Recommendations([FromQuery] int limit, [FromQuery] int offset = 0)
         {
             var user = users.GetById(this.GetUserId());
 

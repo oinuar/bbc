@@ -39,7 +39,7 @@ namespace tech.haamu.Movie.IntegrationTest
 
         private async Task WhenUserRequestsMovieRecommendations()
         {
-            var response = await httpClient.GetStreamAsync("http://localhost:5000/api/movie/recommend?limit=100");
+            var response = await httpClient.GetStreamAsync("http://localhost:5000/api/movie/recommendations?limit=100");
 
             recommendations = await JsonSerializer.DeserializeAsync<IList<Models.Movie>>(response, new JsonSerializerOptions
             {

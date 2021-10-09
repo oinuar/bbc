@@ -93,7 +93,7 @@ namespace tech.haamu.Movie.UnitTest.Controllers
         }
 
         [Fact]
-        public async Task Recommend()
+        public async Task Recommendations()
         {
             var movieLibrary = new Mock<IMovieLibrary>(MockBehavior.Strict);
             var users = new Mock<Users>(() => new Users(null, null), MockBehavior.Strict);
@@ -130,7 +130,7 @@ namespace tech.haamu.Movie.UnitTest.Controllers
                 }
             };
 
-            await controller.Recommend(1000, 11);
+            await controller.Recommendations(1000, 11);
 
             movieLibrary.VerifyAll();
             users.VerifyAll();

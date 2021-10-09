@@ -5,5 +5,11 @@ const instance = axios.create({
 });
 
 export function useApi() {
-  return instance;
+   return instance;
+}
+
+export function makeUserHeader(accessToken) {
+   return {
+      Authorization: `Bearer ${accessToken}`,
+   };
 }

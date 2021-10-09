@@ -31,6 +31,23 @@ namespace tech.haamu.Movie.Services
             return Task.FromResult(movie);
         }
 
+        public Task<IReadOnlyList<Models.Movie>> GetAll(int limit, int offset = 0, CancellationToken cancellationToken = default)
+        {
+            var results = movies
+
+                // Order results by ID.
+                .OrderBy(x => x.Id)
+
+                // Add pagination support.
+                .Skip(offset)
+                .Take(limit)
+
+                // Convert it to list to force execution of the enumerator.
+                .ToList();
+
+            return Task.FromResult((IReadOnlyList<Models.Movie>)results);
+        }
+
         public Task<IReadOnlyList<Models.Movie>> GetMoviesByGenres(IEnumerable<string> genres, IEnumerable<string> excludedMovieIds, int limit, int offset = 0, CancellationToken cancellationToken = default)
         {
             if (genres == null)

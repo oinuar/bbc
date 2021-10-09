@@ -70,6 +70,10 @@ Use cases
 
 Here is a list of the use cases that the application consist of. Each use case has a matching BDD style integration test.
 
+**Scenario: Generate access token**\
+**When** user requests an access token**\
+**Then** generate a JWT token
+
 **Scenario: Like a movie**\
 **Given** user has an access token\
 **When** user likes a movie\
@@ -83,12 +87,16 @@ Here is a list of the use cases that the application consist of. Each use case h
 
 **Scenario: Get movie recommendations for user based on genre preference**\
 **Given** user has an access token\
-**When** user requests movie recommendations\
+**When** user requests more movie recommendations\
 **Then** extract unique genres from user's liked movies\
- **And** search movies from a movie library\
+ **And** query next chunk of movies from a movie library\
  **And** list a movie if the movie's genres contain any of the extracted genres\
  **And** filter out the movies that user has liked already
 
+**Scenario: Get paginated movies from movie library**\
+**Given** user has an access token\
+**When** user scrolls down the movie list\
+**Then** query next chunk of movie results from movie library
 
 Development & Usage
 ===

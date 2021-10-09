@@ -17,6 +17,16 @@ namespace tech.haamu.Movie.Services
         /// <returns>Asynchronous result that completes when the movie is retrieved.</returns>
         public Task<Models.Movie> GetById(string movieId, CancellationToken cancellationToken = default);
 
+
+        /// <summary>
+        /// Get all movies.
+        /// </summary>
+        /// <param name="limit">Sets the maximum amount of returned movie results.</param>
+        /// <param name="offset">Sets result offset.</param>
+        /// <param name="cancellationToken">A cancellation token that is capable of cancelling the asynchronous operation.</param>
+        /// <returns>Asynchronous result that completes when a list of movies are retrieved.</returns>
+        public Task<IReadOnlyList<Models.Movie>> GetAll(int limit, int offset = 0, CancellationToken cancellationToken = default);
+
         /// <summary>
         /// Gets movies by genres.
         /// 
