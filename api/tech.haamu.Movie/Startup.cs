@@ -53,6 +53,10 @@ namespace tech.haamu.Movie
                 app.UseDeveloperExceptionPage();
             }
 
+            // Globally prefix all endpoints since this plays well with Kubernetes ingress.
+            // Must be before UseRouting() and remember to change ingress configuration if you change this!
+            app.UsePathBase("/api");
+
             app.UseRouting();
 
             app.UseAuthorization();

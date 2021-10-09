@@ -20,26 +20,26 @@ namespace tech.haamu.Movie.IntegrationTest
 
         private async Task GivenUserHasAnAccessToken()
         {
-            var token = await httpClient.GetStringAsync("http://localhost:5000/user/token/1");
+            var token = await httpClient.GetStringAsync("http://localhost:5000/api/user/token/1");
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
         private async Task AndUserHasLikedTheMovie()
         {
-            var response = await httpClient.PostAsync("http://localhost:5000/movie/like/tt0118715", null);
+            var response = await httpClient.PostAsync("http://localhost:5000/api/movie/like/tt0118715", null);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         private async Task WhenUserDislikesAMovie()
         {
-            var response = await httpClient.PostAsync("http://localhost:5000/movie/dislike/tt0118715", null);
+            var response = await httpClient.PostAsync("http://localhost:5000/api/movie/dislike/tt0118715", null);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
-        private void ThenAddTheLikedMovieToTheUserPreference()
+        private void ThenRemoveTheLikedMovieFromTheUserPreference()
         {
             var users = host.Services.GetRequiredService<Users>();
             var user = users.GetById("1");

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: {{ include "api.fullname" . }}
+  labels:
+    {{- include "api.labels" . | nindent 4 }}
+
+spec:
+  selector:
+    matchLabels:
+      {{- include "api.selectorLabels" . | nindent 6 }}
+
+  template:
+    metadata:
+      labels:
+        {{- include "api.selectorLabels" . | nindent 8 }}
+
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image.name | quote }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+        ports:
+        - containerPort: 80
+          name: "http"
+
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+
+        # TODO: enable this
+        #livenessProbe:
+          #httpGet:
+            #path: /healthz
+            #port: 80
+          #initialDelaySeconds: 3
+          #periodSeconds: 30

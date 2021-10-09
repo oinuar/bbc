@@ -1,0 +1,52 @@
+apiVersion: skaffold/v2beta10
+kind: Config
+
+metadata:
+  name: bbc
+
+build:
+  artifacts:
+  - image: api
+    context: api
+
+  - image: frontend
+    context: frontend
+    sync:
+      manual:
+      - src: src/**
+        dest: /usr/local/app
+      - src: test/**
+        dest: /usr/local/app
+
+  local:
+    push: false
+    tryImportMissing: true
+
+deploy:
+  helm:
+    releases:
+    - name: latest
+      chartPath: chart
+      namespace: bbc
+      createNamespace: true
+
+      artifactOverrides:
+        api.image.name: api
+        frontend.image.name: frontend
+
+      setValues:
+        frontend.port: 80
+
+profiles:
+  - name: local
+    activation:
+    - command: dev
+    patches:
+    - op: add
+      path: /build/artifacts/1/docker
+      value:
+        target: build
+
+    - op: replace
+      path: /deploy/helm/releases/0/setValues/frontend.port
+      value: 3000
