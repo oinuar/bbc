@@ -34,8 +34,8 @@ const slice = createSlice({
 
 export default slice;
 
-export function getLikes(state) {
-   return state[slice.name].likesByMovieId;
+export function getLike(id, state) {
+   return state[slice.name].likesByMovieId[id] ?? false;
 }
 
 function* likeMovie({ payload }) {
