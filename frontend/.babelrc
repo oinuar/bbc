@@ -1,0 +1,18 @@
+{
+   "presets": [
+      [
+         "@babel/env",
+         {
+            "targets": {
+               "node": "current"
+            }
+         }
+      ],
+      "@babel/react"
+   ],
+   "plugins": [
+      "@babel/transform-runtime",
+      "react-hot-loader/babel",
+      "react-displayname-path"
+   ]
+}
