@@ -5,11 +5,13 @@ import {
 import generateAccessToken, { saga as generateAccessTokenSaga } from '@/scenarios/GenerateAccessToken';
 import getPaginatedMoviesFromMovieLibrary, { saga as getPaginatedMoviesSaga } from '@/scenarios/GetPaginatedMoviesFromMovieLibrary';
 import likeOrDislikeMovie, { saga as likeOrDislikeMovieSaga } from '@/scenarios/LikeOrDislikeMovie';
+import getMovieRecommendationsBasedOnUserGenrePreference, { saga as getMovieRecommendationsBasedOnUserGenrePreferenceSaga } from '@/scenarios/GetMovieRecommendationsBasedOnUserGenrePreference';
 
 export default {
    [generateAccessToken.name]: generateAccessToken.reducer,
    [getPaginatedMoviesFromMovieLibrary.name]: getPaginatedMoviesFromMovieLibrary.reducer,
    [likeOrDislikeMovie.name]: likeOrDislikeMovie.reducer,
+   [getMovieRecommendationsBasedOnUserGenrePreference.name]: getMovieRecommendationsBasedOnUserGenrePreference.reducer,
 };
 
 /** This debug saga will print all the dispatched actions to console's debug log.
@@ -25,6 +27,7 @@ export function* saga() {
       fork(generateAccessTokenSaga),
       fork(getPaginatedMoviesSaga),
       fork(likeOrDislikeMovieSaga),
+      fork(getMovieRecommendationsBasedOnUserGenrePreferenceSaga),
       takeEvery('*', debugSaga),
    ]);
 }

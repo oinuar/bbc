@@ -9,7 +9,7 @@ import MovieRecommendations from '@/components/MovieRecommendations';
 export default () => {
    return (
       <Page>
-         <div class="mb-20">
+         <div className="mb-20">
             <h1 className="text-4xl pt-10 pb-10">Movies that you might like...</h1>
 
             <MovieRecommendations />

@@ -4,9 +4,16 @@ import {
 
 import MovieCard from '@/components/MovieCard';
 
+import getMovieRecommendationsBasedOnUserGenrePreference, {
+   getAll, isLoading, hasMoreResults,
+} from '@/scenarios/GetMovieRecommendationsBasedOnUserGenrePreference';
+
 export default () => {
    const dispatch = useDispatch();
-   const movies = [];
+
+   const movies = useSelector(getAll);
+   const loading = useSelector(isLoading);
+   const hasNextPage = useSelector(hasMoreResults);
 
    const cards = movies.map(x => (
       <MovieCard key={x.id} {...x} />
@@ -14,13 +21,21 @@ export default () => {
 
    return (
       <React.Fragment>
-         <div className="flex flex-wrap justify-center items-center">
+         <div className="flex flex-wrap justify-start items-center">
             {cards}
 
-            <div>
-               Show more
-            </div>
+            {hasNextPage ? (
+               <button role="button" onClick={useAction(dispatch, getMovieRecommendationsBasedOnUserGenrePreference.actions['user requests more movie recommendations'])}>
+                  Show more
+               </button>
+            ) : null}
          </div>
+
+         {loading ? (
+            <div>
+               Loading...
+            </div>
+         ) : null}
       </React.Fragment>
    );
 };
