@@ -2,6 +2,3 @@ nameOverride: ""
 fullnameOverride: ""
 
 frontendPort: 80
-
-# Set path to OSM data directory.
-osmFilesystemPath: ""
