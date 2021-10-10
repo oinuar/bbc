@@ -8,7 +8,7 @@ import likeOrDislikeMovie, {
    getLike,
 } from '@/scenarios/LikeOrDislikeMovie';
 
-function getLabelStyle(id) {
+function getCoverStyle(id) {
    switch (id) {
       case 'tt0118715':
          return {
@@ -71,7 +71,7 @@ export default ({ id, genres, name }) => {
    ));
 
    return (
-      <div className="w-64 h-72 m-6 flex flex-col justify-end shadow-lg border-2 border-gray-200" style={getLabelStyle(id)}>
+      <div className="w-64 h-72 m-6 flex flex-col justify-end shadow-lg border-2 border-gray-200" style={getCoverStyle(id)}>
          <div className="flex-1 p-2">
             <div className="flex flex-wrap">
                {pills}

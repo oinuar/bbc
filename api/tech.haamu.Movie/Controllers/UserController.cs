@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using tech.haamu.Movie.Services;
@@ -53,9 +52,7 @@ namespace tech.haamu.Movie.Controllers
         {
             var user = users.GetById(this.GetUserId());
 
-            var likes = (user.LikedMovies ?? Enumerable.Empty<Models.Movie>()).ToLookup(x => x.Id);
-
-            return movieIds.Where(x => likes.Contains(x));
+            return users.GetLikes(user, movieIds);
         }
     }
 }

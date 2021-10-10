@@ -68,5 +68,25 @@ namespace tech.haamu.Movie.Services
 
             user.LikedMovies.Remove(movie);
         }
+
+        /// <summary>
+        /// Checks user's liked movies against given movie IDs.
+        /// </summary>
+        /// <param name="user">User which likes are checked.</param>
+        /// <param name="movieIds">Movie IDs that are checked.</param>
+        /// <returns>An enumerable that is a subset of movieIds and contains only movies that user has liked.</returns>
+        public virtual IEnumerable<string> GetLikes(User user, IEnumerable<string> movieIds)
+        {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            if (movieIds == null)
+                throw new ArgumentNullException(nameof(movieIds));
+
+            // Convert liked movies to lookup to speed up contains checks from O(n) to O(1).
+            var likes = (user.LikedMovies ?? Enumerable.Empty<Models.Movie>()).ToLookup(x => x.Id);
+
+            return movieIds.Where(x => likes.Contains(x));
+        }
     }
 }

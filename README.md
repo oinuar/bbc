@@ -98,6 +98,11 @@ Here is a list of the use cases that the application consist of. Each use case h
 **When** user scrolls down the movie list\
 **Then** query next chunk of movie results from movie library
 
+**Scenario: Get user preference movies**\
+**Given** user has liked some movies\
+**When** user queries which movies are their preference\
+**Then** create a subset of given movies to contain only ones that user has liked
+
 Development & Usage
 ===
 

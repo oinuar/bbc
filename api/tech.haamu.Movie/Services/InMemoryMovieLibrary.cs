@@ -53,6 +53,9 @@ namespace tech.haamu.Movie.Services
             if (genres == null)
                 throw new ArgumentNullException(nameof(genres));
 
+            if (excludedMovieIds == null)
+                throw new ArgumentNullException(nameof(excludedMovieIds));
+
             // Make genres a lookup to speed up existence checks from O(n) to O(1).
             var lookup = genres.ToLookup(x => x);
 

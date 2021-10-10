@@ -8,11 +8,30 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Xunit;
+using tech.haamu.Movie.Models;
 
 namespace tech.haamu.Movie.UnitTest.Controllers
 {
     public class MovieControllerTest
     {
+        [Fact]
+        public async Task Index()
+        {
+            var movieLibrary = new Mock<IMovieLibrary>(MockBehavior.Strict);
+            var movie = new Movie.Models.Movie { Id = "unit test movie id" };
+
+            movieLibrary
+                .Setup(x => x.GetAll(1000, 11, default))
+                .ReturnsAsync(new[] { movie });
+
+            var controller = new MovieController(movieLibrary.Object, null);
+
+            var result = await controller.Index(1000, 11);
+
+            Assert.Equal(new[] { movie }, result, new IdModel<string>.Comparer<Movie.Models.Movie>());
+
+            movieLibrary.VerifyAll();
+        }
 
         [Fact]
         public async Task Like()
@@ -20,7 +39,7 @@ namespace tech.haamu.Movie.UnitTest.Controllers
             var movieLibrary = new Mock<IMovieLibrary>(MockBehavior.Strict);
             var users = new Mock<Users>(() => new Users(null, null), MockBehavior.Strict);
             var movie = new Movie.Models.Movie { Id = "unit test movie id" };
-            var user = new Movie.Models.User { Id = "unit test user id" };
+            var user = new User { Id = "unit test user id" };
 
             movieLibrary
                 .Setup(x => x.GetById(movie.Id, default))
@@ -59,7 +78,7 @@ namespace tech.haamu.Movie.UnitTest.Controllers
             var movieLibrary = new Mock<IMovieLibrary>(MockBehavior.Strict);
             var users = new Mock<Users>(() => new Users(null, null), MockBehavior.Strict);
             var movie = new Movie.Models.Movie { Id = "unit test movie id" };
-            var user = new Movie.Models.User { Id = "unit test user id" };
+            var user = new User { Id = "unit test user id" };
 
             movieLibrary
                 .Setup(x => x.GetById(movie.Id, default))
@@ -98,12 +117,13 @@ namespace tech.haamu.Movie.UnitTest.Controllers
             var movieLibrary = new Mock<IMovieLibrary>(MockBehavior.Strict);
             var users = new Mock<Users>(() => new Users(null, null), MockBehavior.Strict);
             var movie = new Movie.Models.Movie();
-            var user = new Movie.Models.User {
+            var user = new User
+            {
                 Id = "unit test user id",
-                LikedMovies = new []
+                LikedMovies = new[]
                 {
-                    new Movie.Models.Movie { Genres = new [] { "unit test genre 1", "unit test genre 2"}},
-                    new Movie.Models.Movie { Genres = new [] { "unit test genre 2"}}
+                    new Movie.Models.Movie { Genres = new [] { "unit test genre 1", "unit test genre 2" } },
+                    new Movie.Models.Movie { Genres = new [] { "unit test genre 2" } }
                 }
             };
 
@@ -130,7 +150,54 @@ namespace tech.haamu.Movie.UnitTest.Controllers
                 }
             };
 
-            await controller.Recommendations(1000, 11);
+            var result = await controller.Recommendations(1000, 11);
+
+            Assert.Equal(new[] { movie }, result, new IdModel<string>.Comparer<Movie.Models.Movie>());
+
+            movieLibrary.VerifyAll();
+            users.VerifyAll();
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task Recommendations_NoLikes(bool isLikedMoviesNull)
+        {
+            var movieLibrary = new Mock<IMovieLibrary>(MockBehavior.Strict);
+            var users = new Mock<Users>(() => new Users(null, null), MockBehavior.Strict);
+            var movie = new Movie.Models.Movie();
+            var user = new User
+            {
+                Id = "unit test user id",
+                LikedMovies = isLikedMoviesNull ? null : new Movie.Models.Movie[] { }
+            };
+
+            movieLibrary
+                .Setup(x => x.GetMoviesByGenres(It.Is<IEnumerable<string>>(x => !x.Any()),
+                    It.Is<IEnumerable<string>>(x => !x.Any()), 1000, 11, default))
+                .ReturnsAsync(new Movie.Models.Movie[] { });
+
+            users
+                .Setup(x => x.GetById(user.Id))
+                .Returns(user);
+
+            var controller = new MovieController(movieLibrary.Object, users.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                        {
+                            new Claim("userId", user.Id)
+                        }))
+                    }
+                }
+            };
+
+            var result = await controller.Recommendations(1000, 11);
+
+            Assert.Empty(result);
 
             movieLibrary.VerifyAll();
             users.VerifyAll();

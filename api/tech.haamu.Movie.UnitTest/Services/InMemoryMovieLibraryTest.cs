@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using System;
 
 namespace tech.haamu.Movie.UnitTest.Services
 {
@@ -30,7 +31,33 @@ namespace tech.haamu.Movie.UnitTest.Services
         }
 
         [Fact]
-        public async Task GetMoviesByGenres_Genres()
+        public async Task GetById_ThrowsArgumentNullException()
+        {
+            var movieLibrary = new InMemoryMovieLibrary(null);
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => movieLibrary.GetById(null));
+        }
+
+        [Theory]
+        [InlineData(1000, 0)]
+        [InlineData(1, 0)]
+        [InlineData(1, 1)]
+        public async Task GetAll(int limit, int offset)
+        {
+            var movies = ImmutableHashSet<Movie.Models.Movie>.Empty.WithComparer(new IdModel<string>.Comparer<Movie.Models.Movie>())
+                .Add(new Movie.Models.Movie { Id = "3", Genres = new string[] { } })
+                .Add(new Movie.Models.Movie { Id = "2", Genres = new string[] { } })
+                .Add(new Movie.Models.Movie { Id = "1", Genres = new string[] {  } });
+
+            var movieLibrary = new InMemoryMovieLibrary(movies);
+
+            var result = await movieLibrary.GetAll(limit, offset);
+
+            Assert.Equal(movies.OrderBy(x => x.Id).Skip(offset).Take(limit), result);
+        }
+
+        [Fact]
+        public async Task GetMoviesByGenres()
         {
             var movies = ImmutableHashSet<Movie.Models.Movie>.Empty.WithComparer(new IdModel<string>.Comparer<Movie.Models.Movie>())
                 .Add(new Movie.Models.Movie { Id = "unit test movie id 1", Genres = new[] { "unit test genre 1" } })
@@ -42,6 +69,18 @@ namespace tech.haamu.Movie.UnitTest.Services
             var result = await movieLibrary.GetMoviesByGenres(new[] { "unit test genre 2" }, Enumerable.Empty<string>(), int.MaxValue);
 
             Assert.Equal(movies.OrderBy(x => x.Id).Skip(1), result);
+        }
+
+        [Theory]
+        [InlineData(true, false)]
+        [InlineData(false, true)]
+        public async Task GetMoviesByGenres_ThrowsArgumentNullException(bool isGenresNull, bool isExcludedMovieIdsNull)
+        {
+            var movieLibrary = new InMemoryMovieLibrary(null);
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                movieLibrary.GetMoviesByGenres(isGenresNull ? null : Enumerable.Empty<string>(),
+                    isExcludedMovieIdsNull ? null : Enumerable.Empty<string>(), 0));
         }
 
         [Fact]

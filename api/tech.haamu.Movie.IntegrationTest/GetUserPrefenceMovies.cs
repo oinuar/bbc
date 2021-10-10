@@ -1,24 +1,25 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using TestStack.BDDfy;
 using Xunit;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text;
 
 namespace tech.haamu.Movie.IntegrationTest
 {
-    public class GetMovieRecommendationsForUserBasedOnGenrePreference
+    public class GetUserPreferenceMovies
     {
         private readonly HttpClient httpClient;
+        private IList<string> movieIds;
         private IHost host;
-        private IList<Models.Movie> recommendations;
 
         private async Task GivenUserHasAnAccessToken()
         {
@@ -28,40 +29,39 @@ namespace tech.haamu.Movie.IntegrationTest
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
-        private async Task GivenUserHasLikedAtLeastOneMovie()
+        private async Task GivenUserHasLikedSomeMovies()
         {
             var responses = new[] {
                 await httpClient.PostAsync("http://localhost:5000/api/movie/like/tt0163651", null),
-                await httpClient.PostAsync("http://localhost:5000/api/movie/like/tt0111161", null)
+                await httpClient.PostAsync("http://localhost:5000/api/movie/like/tt0111161", null),
+                await httpClient.PostAsync("http://localhost:5000/api/movie/like/tt2527336", null)
             };
 
             Assert.All(responses, x => Assert.Equal(HttpStatusCode.OK, x.StatusCode));
         }
 
-        private async Task WhenUserRequestsMovieRecommendations()
+        private async Task WhenUserQueriesWhichMoviesAreTheirPreference()
         {
-            var response = await httpClient.PostAsync("http://localhost:5000/api/movie/recommendations?limit=100", null);
+            var content = new StringContent(JsonSerializer.Serialize(new string[]
+            {
+                "tt0163651", "tt0848228", "tt0111161", "tt0068646"
+            }), Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PostAsync("http://localhost:5000/api/user/moviePreference", content);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var stream = await response.Content.ReadAsStreamAsync();
 
-            recommendations = await JsonSerializer.DeserializeAsync<IList<Models.Movie>>(stream, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            movieIds = await JsonSerializer.DeserializeAsync<IList<string>>(stream);
         }
 
-        private void ThenSearchMoviesFromAMovieLibraryAndListAMovieIfTheMoviesGenresContainAnyOfTheExtractedGenresAndFilterOutMoviesThatUserHasLikedAlready()
+        private void ThenCreateASubsetOfGivenMoviesToContainOnlyOnesThatUserHasLiked()
         {
-            Assert.Equal(JsonSerializer.Serialize(new[] {
-                new Models.Movie { Id = "tt0068646", Genres = new[] { "Crime", "Drama" }, Name = "The Godfather" },
-                new Models.Movie { Id = "tt0088763", Genres = new[] { "Adventure", "Comedy", "Sci-fi" }, Name = "Back to the Future" },
-                new Models.Movie { Id = "tt0118715", Genres = new[] { "Comedy", "Crime", "Sport" }, Name = "The Big Lebowski" }
-            }), JsonSerializer.Serialize(recommendations));
+            Assert.Equal(new[] { "tt0163651", "tt0111161" }, movieIds);
         }
 
-        public GetMovieRecommendationsForUserBasedOnGenrePreference()
+        public GetUserPreferenceMovies()
         {
             httpClient = new HttpClient();
         }
@@ -74,7 +74,7 @@ namespace tech.haamu.Movie.IntegrationTest
 
             // Build a hosting service for the web server.
             host = Host.CreateDefaultBuilder()
-                .ConfigureWebHostDefaults(webBuilder => 
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 }).Build();

@@ -2,6 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
+using tech.haamu.Movie.Services;
+using tech.haamu.Movie.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace tech.haamu.Movie.UnitTest.Controllers
 {
@@ -36,7 +41,38 @@ namespace tech.haamu.Movie.UnitTest.Controllers
         [Fact]
         public void MoviePreference()
         {
-            // TODO: implement
+            var users = new Mock<Users>(() => new Users(null, null), MockBehavior.Strict);
+
+            var user = new User { Id = "1" };
+            var moveIds = new string[] { "1", "2" };
+
+            users
+                .Setup(x => x.GetById(user.Id))
+                .Returns(user);
+
+            users
+                .Setup(x => x.GetLikes(user, moveIds))
+                .Returns(new string[] { "1" });
+
+            var controller = new UserController(null, users.Object)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                        {
+                            new Claim("userId", user.Id)
+                        }))
+                    }
+                }
+            };
+
+            var result = controller.MoviePreference(moveIds);
+
+            Assert.Equal(new string[] { "1" }, result);
+
+            users.VerifyAll();
         }
     }
 }
