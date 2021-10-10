@@ -24,13 +24,19 @@ namespace tech.haamu.Movie.UnitTest.Controllers
                 .Setup(x => x["Jwt:Audience"])
                 .Returns("unit test audience");
 
-            var controller = new UserController(configuration.Object);
+            var controller = new UserController(configuration.Object, null);
 
             var result = controller.Token("1");
 
             Assert.Equal("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJEdW1teSB1c2VyIiwidXNlcklkIjoiMSIsImlzcyI6InVuaXQgdGVzdCBpc3N1ZXIiLCJhdWQiOiJ1bml0IHRlc3QgYXVkaWVuY2UifQ.n8dNOAENFmVWBK8eBr3gLAgJz2GtzKPuG70Uy1nV9_Y", result);
 
             configuration.VerifyAll();
+        }
+
+        [Fact]
+        public void MoviePreference()
+        {
+            // TODO: implement
         }
     }
 }

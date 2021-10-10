@@ -36,7 +36,7 @@ function* generateJwtToken() {
    // Generate token if it does not already exists. We should check expiry here
    // as well (and regenerate if expired) if our token could expire.
    if (!token) {
-      const response = yield call(api.get, 'user/token/1');
+      const response = yield call(api.post, 'user/token/1');
 
       token = response.data;
    }

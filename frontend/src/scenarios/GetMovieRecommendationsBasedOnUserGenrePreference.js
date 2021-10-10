@@ -36,6 +36,10 @@ const slice = createSlice({
          state.hasMoreResults = payload.length >= state.limit;
          state.loading = false;
       },
+
+      _reset: state => {
+         state.offset = 0;
+      },
    }
 });
 
@@ -68,7 +72,7 @@ function* recommendations() {
    const offset = yield select(getOffset);
    const limit = yield select(getLimit);
 
-   const response = yield call(api.get, 'movie/recommendations', {
+   const response = yield call(api.post, 'movie/recommendations', {}, {
       headers: makeUserHeader(token),
       params: { offset, limit },
    });
@@ -83,6 +87,8 @@ function* queryNextChunkOfMoviesFromMovieLibrary() {
 }
 
 function* queryMoviesFromMovieLibrary() {
+   yield put(slice.actions._reset());
+
    const response = yield* recommendations();
 
    yield put(slice.actions['query movies from a movie library'](response.data));

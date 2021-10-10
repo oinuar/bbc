@@ -46,11 +46,12 @@ namespace tech.haamu.Movie.Controllers
         }
 
         [Route("[action]")]
+        [HttpPost]
         public Task<IReadOnlyList<Models.Movie>> Recommendations([FromQuery] int limit, [FromQuery] int offset = 0)
         {
             var user = users.GetById(this.GetUserId());
 
-            var likedMovies = (user.LikedMovies ?? Enumerable.Empty<Models.Movie>());
+            var likedMovies = user.LikedMovies ?? Enumerable.Empty<Models.Movie>();
 
             var likedGenres = likedMovies
                 .AsQueryable()

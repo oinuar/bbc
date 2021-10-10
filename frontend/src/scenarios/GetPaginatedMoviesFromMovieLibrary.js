@@ -5,6 +5,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { useApi, makeUserHeader } from '@/api';
 
 import { userHasAccessToken } from '@/scenarios/GenerateAccessToken';
+import likeOrDislikeMovie from '@/scenarios/LikeOrDislikeMovie';
 
 const slice = createSlice({
    name: 'Get paginated movies from movie library',
@@ -64,6 +65,13 @@ function* queryNextChunkOfMovieResultsFromMovieLibrary() {
       headers: makeUserHeader(token),
       params: { offset, limit },
    });
+
+   const userPreferences = yield call(api.post, 'user/moviePreference', response.data.map(x => x.id), {
+      headers: makeUserHeader(token),
+   });
+
+   for (let i = 0; i < userPreferences.data.length; ++i)
+      yield put(likeOrDislikeMovie.actions['add the liked movie to the user preference'](userPreferences.data[i]));
 
    yield put(slice.actions['query next chunk of movie results from movie library'](response.data));
 }

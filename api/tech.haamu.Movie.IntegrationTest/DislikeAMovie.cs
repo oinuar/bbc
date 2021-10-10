@@ -20,7 +20,8 @@ namespace tech.haamu.Movie.IntegrationTest
 
         private async Task GivenUserHasAnAccessToken()
         {
-            var token = await httpClient.GetStringAsync("http://localhost:5000/api/user/token/1");
+            var response = await httpClient.PostAsync("http://localhost:5000/api/user/token/1", null);
+            var token = await response.Content.ReadAsStringAsync();
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }

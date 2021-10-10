@@ -22,7 +22,8 @@ namespace tech.haamu.Movie.IntegrationTest
 
         private async Task GivenUserHasAnAccessToken()
         {
-            var token = await httpClient.GetStringAsync("http://localhost:5000/api/user/token/1");
+            var response = await httpClient.PostAsync("http://localhost:5000/api/user/token/1", null);
+            var token = await response.Content.ReadAsStringAsync();
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
@@ -39,9 +40,10 @@ namespace tech.haamu.Movie.IntegrationTest
 
         private async Task WhenUserRequestsMovieRecommendations()
         {
-            var response = await httpClient.GetStreamAsync("http://localhost:5000/api/movie/recommendations?limit=100");
+            var response = await httpClient.PostAsync("http://localhost:5000/api/movie/recommendations?limit=100", null);
+            var stream = await response.Content.ReadAsStreamAsync();
 
-            recommendations = await JsonSerializer.DeserializeAsync<IList<Models.Movie>>(response, new JsonSerializerOptions
+            recommendations = await JsonSerializer.DeserializeAsync<IList<Models.Movie>>(stream, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
