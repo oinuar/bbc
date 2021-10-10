@@ -15,8 +15,8 @@ export default () => {
    const loading = useSelector(isLoading);
    const hasNextPage = useSelector(hasMoreResults);
 
-   const cards = movies.map(x => (
-      <MovieCard key={x.id} {...x} />
+   const cards = movies.map(movie => (
+      <MovieCard key={movie.id} {...movie} />
    ));
 
    return (
@@ -24,18 +24,18 @@ export default () => {
          <div className="flex flex-wrap justify-start items-center">
             {cards}
 
-            {hasNextPage ? (
+            {(!loading && hasNextPage) ? (
                <button role="button" onClick={useAction(dispatch, getMovieRecommendationsBasedOnUserGenrePreference.actions['user requests more movie recommendations'])}>
                   Show more
                </button>
             ) : null}
-         </div>
 
-         {loading ? (
-            <div>
-               Loading...
-            </div>
-         ) : null}
+            {loading ? (
+               <div>
+                  Loading...
+               </div>
+            ) : null}
+         </div>
       </React.Fragment>
    );
 };

@@ -30,9 +30,11 @@ const slice = createSlice({
          state.loading = false;
       },
 
-      reset: state => {
-         state.all = [];
-         state.offset = 0;
+      'query movies from a movie library': (state, { payload }) => {
+         state.all = payload.slice();
+         state.offset = Math.min(payload.length, state.limit);
+         state.hasMoreResults = payload.length >= state.limit;
+         state.loading = false;
       },
    }
 });
@@ -59,7 +61,7 @@ function getLimit(state) {
    return state[slice.name].limit;
 }
 
-function* queryNextChunkOfMoviesFromMovieLibrary() {
+function* recommendations() {
    const api = useApi();
    const token = yield* userHasAccessToken();
 
@@ -71,20 +73,27 @@ function* queryNextChunkOfMoviesFromMovieLibrary() {
       params: { offset, limit },
    });
 
+   return response;
+}
+
+function* queryNextChunkOfMoviesFromMovieLibrary() {
+   const response = yield* recommendations();
+
    yield put(slice.actions['query next chunk of movies from a movie library'](response.data));
 }
 
-function* queryFreshMoviesFromMovieLibrary() {
-   yield put(slice.actions.reset());
-   yield* queryNextChunkOfMoviesFromMovieLibrary();
+function* queryMoviesFromMovieLibrary() {
+   const response = yield* recommendations();
+
+   yield put(slice.actions['query movies from a movie library'](response.data));
 }
 
 export function* saga() {
    yield all([
       takeLatest(slice.actions['user requests more movie recommendations'], queryNextChunkOfMoviesFromMovieLibrary),
       takeLatest([
-         likeOrDislikeMovie.actions['user likes a movie'],
-         likeOrDislikeMovie.actions['user dislikes a movie'],
-      ], queryFreshMoviesFromMovieLibrary),
+         likeOrDislikeMovie.actions['add the liked movie to the user preference'],
+         likeOrDislikeMovie.actions['remove the liked movie from the user preference'],
+      ], queryMoviesFromMovieLibrary),
    ]);
 }
