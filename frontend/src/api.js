@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { getApiUrl } from '@/config';
 
 const instance = axios.create({
-  baseURL: window.location.origin + '/api',
+   baseURL: getApiUrl(),
 });
 
 export function useApi() {
