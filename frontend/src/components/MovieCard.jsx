@@ -9,10 +9,51 @@ import likeOrDislikeMovie, {
 } from '@/scenarios/LikeOrDislikeMovie';
 
 function getLabelStyle(id) {
-   return {
-      backgroundImage: 'url(https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg)',
-      backgroundPosition: '50% 15%',
-   };
+   switch (id) {
+      case 'tt0118715':
+         return {
+            backgroundImage: 'url(https://m.media-amazon.com/images/M/MV5BMTQ0NjUzMDMyOF5BMl5BanBnXkFtZTgwODA1OTU0MDE@._V1_.jpg)',
+            backgroundPosition: '63% 27%',
+         };
+
+      case 'tt0068646':
+         return {
+            backgroundImage: 'url(https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg)',
+            backgroundPosition: '50% 15%',
+         };
+
+      case 'tt0088763':
+         return {
+            backgroundImage: 'url(https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg)',
+            backgroundPosition: '65% 28%',
+         };
+
+      case 'tt0111161':
+         return {
+            backgroundImage: 'url(https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg)',
+            backgroundPosition: '50% 15%',
+         };
+
+      case 'tt0163651':
+         return {
+            backgroundImage: 'url(https://m.media-amazon.com/images/M/MV5BMTg3ODY5ODI1NF5BMl5BanBnXkFtZTgwMTkxNTYxMTE@._V1_.jpg)',
+            backgroundPosition: '50% 27%',
+         };
+
+      case 'tt0848228':
+         return {
+            backgroundImage: 'url(https://m.media-amazon.com/images/M/MV5BNDYxNjQyMjAtNTdiOS00NGYwLWFmNTAtNThmYjU5ZGI2YTI1XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg)',
+            backgroundPosition: '38% 27%',
+         };
+
+      case 'tt2527336':
+         return {
+            backgroundImage: 'url(https://m.media-amazon.com/images/M/MV5BMjQ1MzcxNjg4N15BMl5BanBnXkFtZTgwNzgwMjY4MzI@._V1_.jpg)',
+            backgroundPosition: '28% 30%',
+         };
+   }
+
+   return {};
 }
 
 export default ({ id, genres, name }) => {
@@ -30,7 +71,7 @@ export default ({ id, genres, name }) => {
    ));
 
    return (
-      <div className="w-64 h-64 m-6 flex flex-col justify-end shadow-lg border-2 border-gray-200" style={getLabelStyle(id)}>
+      <div className="w-64 h-72 m-6 flex flex-col justify-end shadow-lg border-2 border-gray-200" style={getLabelStyle(id)}>
          <div className="flex-1 p-2">
             <div className="flex flex-wrap">
                {pills}
