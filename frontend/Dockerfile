@@ -35,10 +35,13 @@ ENTRYPOINT [ "npm", "run" ]
 CMD [ "dev" ]
 
 
-FROM build as publish
+FROM build as qa
 
-# Run tests.
-RUN npm run test
+# Run linting and tests.
+RUN npm run lint:check && npm run test
+
+
+FROM qa as publish
 
 # Build the application.
 RUN npm run build

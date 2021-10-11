@@ -11,15 +11,10 @@ RUN dotnet restore "."
 COPY . .
 RUN dotnet build "." -c Release -o /app/build
 
-FROM build AS unit-test
-CMD [ "dotnet", "test", "-v", "n", "tech.haamu.Movie.UnitTest/" ]
-
-FROM build AS integration-test
-CMD [ "dotnet", "test", "-v", "n", "tech.haamu.Movie.IntegrationTest/" ]
+FROM build AS qa
+RUN dotnet test "tech.haamu.Movie.UnitTest/" && dotnet test "tech.haamu.Movie.IntegrationTest/"
 
 FROM build AS publish
-RUN dotnet test "tech.haamu.Movie.UnitTest/"
-RUN dotnet test "tech.haamu.Movie.IntegrationTest/"
 RUN dotnet publish "tech.haamu.Movie/" -c Release -o /app/publish
 
 FROM base AS final
