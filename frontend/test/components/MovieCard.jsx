@@ -62,7 +62,7 @@ function getExpectedTree(style, genres, name, likeTitle, heartSymbol) {
           {
             type: 'button',
             props: {
-              role: 'button',
+              type: 'button',
               className: 'text-5xl text-white',
               title: likeTitle,
             },

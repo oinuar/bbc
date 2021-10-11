@@ -62,7 +62,7 @@ function getExpectedTree(movies, showLoading, showMore) {
       ? [{
         type: 'button',
         props: {
-          role: 'button',
+          type: 'button',
         },
         children: [
           'Show more',
