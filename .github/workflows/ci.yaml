@@ -6,15 +6,24 @@ on:
       - latest
 
 jobs:
-  build:
+  apiQA:
+    name: Quality assurance for REST API
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: Quality assurance for REST API
+      - name: Check
         run: docker build -f api/Dockerfile --target=qa -t api api/
 
-      - name: Quality assurance for frontend
+  frontendQA:
+    name: Quality assurance for frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Check
         run: docker build -f frontend/Dockerfile --target=qa -t frontend frontend/
