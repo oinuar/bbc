@@ -2,15 +2,15 @@ import axios from 'axios';
 import { getApiUrl } from '@/config';
 
 const instance = axios.create({
-   baseURL: getApiUrl(),
+  baseURL: getApiUrl(),
 });
 
 export function useApi() {
-   return instance;
+  return instance;
 }
 
 export function makeUserHeader(accessToken) {
-   return {
-      Authorization: `Bearer ${accessToken}`,
-   };
+  return {
+    Authorization: `Bearer ${accessToken}`,
+  };
 }

@@ -5,9 +5,9 @@ import reducer, { saga } from '@/scenarios';
 const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
-   reducer,
-   middleware: [sagaMiddleware],
-   devTools: process.env.NODE_ENV !== 'production',
+  reducer,
+  middleware: [sagaMiddleware],
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 sagaMiddleware.run(saga);

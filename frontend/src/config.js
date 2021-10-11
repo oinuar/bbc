@@ -1,3 +1,3 @@
 export function getApiUrl() {
-   return window.location.origin + '/api';
+  return `${window.location.origin}/api`;
 }

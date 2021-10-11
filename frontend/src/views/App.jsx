@@ -8,9 +8,9 @@ import 'tailwindcss/tailwind.css';
 import '@/style.css';
 
 const App = () => (
-   <Provider store={store}>
-      <Views />
-   </Provider>
+  <Provider store={store}>
+    <Views />
+  </Provider>
 );
 
 export default hot(App);
