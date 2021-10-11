@@ -10,7 +10,7 @@ The project contains ASP.NET REST API and simple React frontend which is deploye
 
 - C# on .NET Core 3.1
 - JavaScript with React, Redux and Redux-Saga
-- HTML with Tailwind
+- HTML with TailwindCSS
 - Kubernetes deloyed using helm
 
 
