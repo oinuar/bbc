@@ -25,14 +25,14 @@ const slice = createSlice({
 
       'query next chunk of movies from a movie library': (state, { payload }) => {
          state.all.push(...payload);
-         state.offset += Math.min(payload.length, state.limit);
+         state.offset += payload.length;
          state.hasMoreResults = payload.length >= state.limit;
          state.loading = false;
       },
 
       'query movies from a movie library': (state, { payload }) => {
          state.all = payload.slice();
-         state.offset = Math.min(payload.length, state.limit);
+         state.offset = payload.length;
          state.hasMoreResults = payload.length >= state.limit;
          state.loading = false;
       },
@@ -67,7 +67,7 @@ function getLimit(state) {
 
 function* recommendations() {
    const api = useApi();
-   const token = yield* userHasAccessToken();
+   const token = yield userHasAccessToken();
 
    const offset = yield select(getOffset);
    const limit = yield select(getLimit);
@@ -81,7 +81,7 @@ function* recommendations() {
 }
 
 function* queryNextChunkOfMoviesFromMovieLibrary() {
-   const response = yield* recommendations();
+   const response = yield recommendations();
 
    yield put(slice.actions['query next chunk of movies from a movie library'](response.data));
 }
@@ -89,7 +89,7 @@ function* queryNextChunkOfMoviesFromMovieLibrary() {
 function* queryMoviesFromMovieLibrary() {
    yield put(slice.actions._reset());
 
-   const response = yield* recommendations();
+   const response = yield recommendations();
 
    yield put(slice.actions['query movies from a movie library'](response.data));
 }

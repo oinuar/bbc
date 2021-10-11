@@ -64,7 +64,7 @@ export default ({ id, genres, name }) => {
       ? useAction(dispatch, likeOrDislikeMovie.actions['user dislikes a movie'], id)
       : useAction(dispatch, likeOrDislikeMovie.actions['user likes a movie'], id);
 
-   const pills = genres.map(label => (
+   const pills = genres?.map(label => (
       <Pill key={label}>
          {label}
       </Pill>

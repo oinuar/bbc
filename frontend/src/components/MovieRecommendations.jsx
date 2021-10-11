@@ -10,12 +10,13 @@ import getMovieRecommendationsBasedOnUserGenrePreference, {
 
 export default () => {
    const dispatch = useDispatch();
+   const onShowMore = useAction(dispatch, getMovieRecommendationsBasedOnUserGenrePreference.actions['user requests more movie recommendations']);
 
    const movies = useSelector(getAll);
    const loading = useSelector(isLoading);
    const hasNextPage = useSelector(hasMoreResults);
 
-   const cards = movies.map(movie => (
+   const cards = movies?.map(movie => (
       <MovieCard key={movie.id} {...movie} />
    ));
 
@@ -25,7 +26,7 @@ export default () => {
             {cards}
 
             {(!loading && hasNextPage) ? (
-               <button role="button" onClick={useAction(dispatch, getMovieRecommendationsBasedOnUserGenrePreference.actions['user requests more movie recommendations'])}>
+               <button role="button" onClick={onShowMore}>
                   Show more
                </button>
             ) : null}

@@ -25,7 +25,7 @@ const slice = createSlice({
 
       'query next chunk of movie results from movie library': (state, { payload }) => {
          state.all.push(...payload);
-         state.offset += Math.min(payload.length, state.limit);
+         state.offset += payload.length;
          state.hasMoreResults = payload.length >= state.limit;
          state.loading = false;
       }
@@ -56,7 +56,7 @@ function getLimit(state) {
 
 function* queryNextChunkOfMovieResultsFromMovieLibrary() {
    const api = useApi();
-   const token = yield* userHasAccessToken();
+   const token = yield userHasAccessToken();
 
    const offset = yield select(getOffset);
    const limit = yield select(getLimit);

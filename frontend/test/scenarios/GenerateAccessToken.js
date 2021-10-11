@@ -9,18 +9,27 @@ jest.mock('@/config', () => ({
 }));
 
 jest.mock('redux-saga/effects', () => ({
-   takeLatest: jest.fn().mockReturnValue([]),
+   takeLatest: jest.fn(),
    select: jest.fn(),
-   put: jest.fn().mockReturnValue([]),
-   take: jest.fn().mockReturnValue([]),
-   call: jest.fn().mockImplementation((f, ...args) => f(...args)),
+   put: jest.fn(),
+   take: jest.fn(),
+   call: jest.fn(),
 }));
 
 jest.mock('@/api', () => ({
-   useApi: jest.fn().mockReturnValue({
-      post: jest.fn(),
-   }),
+   useApi: jest.fn(),
 }));
+
+beforeEach(() => {
+   takeLatest.mockReturnValue([]);
+   put.mockReturnValue([]);
+   take.mockReturnValue([]);
+   call.mockImplementation((f, ...args) => f(...args));
+
+   useApi.mockReturnValue({
+      post: jest.fn(),
+   });
+});
 
 it('has name', () => {
    expect(slice.name).toEqual('Generate access token');
@@ -42,18 +51,18 @@ it('reduces generate a JWT token', () => {
    expect(state).toEqual({ token: 'unit test token' });
 });
 
-describe('acts on user requests an access token', () => {
+describe('act on user requests an access token', () => {
    function* run(state) {
-      yield* saga();
+      yield saga();
 
       expect(takeLatest).toHaveBeenCalled();
       expect(takeLatest.mock.calls[0][0].toString()).toEqual(slice.actions['user requests an access token'].toString());
 
-      const effect = takeLatest.mock.calls[0][1];
+      const generateJwtToken = takeLatest.mock.calls[0][1];
 
       select.mockImplementation(f => Promise.resolve(f(state)));
 
-      yield* effect();
+      yield generateJwtToken();
    }
 
    it('uses existing token', function*() {
@@ -63,7 +72,7 @@ describe('acts on user requests an access token', () => {
          },
       };
 
-      yield* run(state);
+      yield run(state);
 
       expect(put).toHaveBeenCalledWith(slice.actions['generate a JWT token'](state[slice.name].token));
    });
@@ -81,7 +90,7 @@ describe('acts on user requests an access token', () => {
          },
       };
 
-      yield* run(state);
+      yield run(state);
 
       expect(call).toHaveBeenCalledWith(api.post, 'user/token/1');
       expect(put).toHaveBeenCalledWith(slice.actions['generate a JWT token']('generated unit test token'));
@@ -97,7 +106,7 @@ it('obtains an access token', function*() {
 
    select.mockImplementation(f => Promise.resolve(f(state)));
 
-   const result = yield* userHasAccessToken();
+   const result = yield userHasAccessToken();
 
    expect(put).toHaveBeenCalledWith(slice.actions['user requests an access token']());
    expect(take).toHaveBeenCalled();

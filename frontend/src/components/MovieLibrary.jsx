@@ -17,7 +17,7 @@ export default () => {
    const loading = useSelector(isLoading);
    const hasNextPage = useSelector(hasMoreResults);
 
-   const [infinityScrollRef] = useInfiniteScroll({
+   const [scrollRef] = useInfiniteScroll({
       loading,
       hasNextPage,
       onLoadMore: useAction(dispatch, getPaginatedMoviesFromMovieLibrary.actions['user scrolls down the movie list']),
@@ -25,7 +25,7 @@ export default () => {
       delayInMs: 300,
    });
 
-   const cards = movies.map(x => (
+   const cards = movies?.map(x => (
       <MovieCard key={x.id} {...x} />
    ));
 
@@ -36,7 +36,7 @@ export default () => {
          </div>
 
          {loading || hasNextPage ? (
-            <div ref={infinityScrollRef}>
+            <div ref={scrollRef}>
                Loading...
             </div>
          ) : null}

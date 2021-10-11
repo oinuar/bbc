@@ -40,7 +40,7 @@ export function getLike(id, state) {
 
 function* likeMovie({ payload }) {
    const api = useApi();
-   const token = yield* userHasAccessToken();
+   const token = yield userHasAccessToken();
 
    yield call(api.post, `movie/like/${payload}`, {}, { headers: makeUserHeader(token) });
 
@@ -49,7 +49,7 @@ function* likeMovie({ payload }) {
 
 function* dislikeMovie({ payload }) {
    const api = useApi();
-   const token = yield* userHasAccessToken();
+   const token = yield userHasAccessToken();
 
    yield call(api.post, `movie/dislike/${payload}`, {}, { headers: makeUserHeader(token) });
 
