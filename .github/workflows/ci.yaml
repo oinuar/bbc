@@ -27,3 +27,19 @@ jobs:
 
       - name: Check
         run: docker build -f frontend/Dockerfile --target=qa -t frontend frontend/
+
+  publish:
+    name: Publish
+    needs: [apiQA, frontendQA]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Build
+        run: skaffold build
+
+      - name: Deploy
+        run: |
+          echo "TODO: deploy to some Kubernetes cluster"
