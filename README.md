@@ -6,7 +6,7 @@ This repository contains example project that demonstrates TDD, BDD, DevOps and 
 Technical stack
 ===
 
-The project contains ASP.NET REST API and simple React frontend which is deployed to Kubernetes using helm. The repository is hosted in GitHub and there is workflow that triggers on every push to verify the validity of each push.
+The project contains ASP.NET REST API and simple React frontend which is deployed to Kubernetes using helm. The repository is hosted in GitHub and there is a workflow that triggers on every push to verify the validity of each push.
 
 - C# on .NET Core 3.1
 - JavaScript with React, Redux and Redux-Saga
@@ -94,7 +94,7 @@ The most simple way for setup a local Kubernetes is to use Docker for Windows (w
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.0.3/deploy/static/provider/cloud/deploy.yaml
 ```
 
-This will deploy an ingress controller so that you can access applications that are running in Kubernetes which is accessable through `http://localhost`. That's it, now you are able to deploy any application ecosystem locally which match the ecosystem running in cloud!
+This will deploy an ingress controller so that you can access applications that are running in Kubernetes which is accessible through `http://localhost`. That's it, now you are able to deploy any application ecosystem locally which match the ecosystem running in cloud!
 
 
 Alternatively, you can just use Visual Studio 2019 with .NET Core and ASP.NET toolkit for REST API and Visual Studio Code for frontend. Open a solution file and then you can start the REST API by pressing F5. However, make sure that the target is `tech.haamu.Movie` which uses Kestrel standalone web server and not IIS. You can run unit and integration tests with a Test Explorer. You can start frontend as you would to start any `npm` based project: `npm install && npm run dev`. However, please keep in mind that frontend assumes that API is used through Kubernetes. Please change `getApiUrl()` accordingly.
