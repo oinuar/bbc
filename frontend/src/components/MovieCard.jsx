@@ -51,6 +51,9 @@ function getCoverStyle(id) {
             backgroundImage: 'url(https://m.media-amazon.com/images/M/MV5BMjQ1MzcxNjg4N15BMl5BanBnXkFtZTgwNzgwMjY4MzI@._V1_.jpg)',
             backgroundPosition: '28% 30%',
          };
+
+      default:
+         break;
    }
 
    return {};
@@ -79,7 +82,7 @@ export default ({ id, genres, name }) => {
          </div>
 
          <div className="p-2">
-            <button role="button" className="text-5xl text-white" title={hasLike ? 'Dislike' : 'Like'} onClick={onLikeOrDislike}>
+            <button type="button" className="text-5xl text-white" title={hasLike ? 'Dislike' : 'Like'} onClick={onLikeOrDislike}>
                {hasLike ? '♥' : '♡'}
             </button>
          </div>

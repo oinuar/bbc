@@ -26,7 +26,7 @@ export default () => {
             {cards}
 
             {(!loading && hasNextPage) ? (
-               <button role="button" onClick={onShowMore}>
+               <button type="button" onClick={onShowMore}>
                   Show more
                </button>
             ) : null}

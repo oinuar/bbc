@@ -37,7 +37,7 @@ const slice = createSlice({
          state.loading = false;
       },
 
-      _reset: state => {
+      reset: state => {
          state.offset = 0;
       },
    }
@@ -87,7 +87,7 @@ function* queryNextChunkOfMoviesFromMovieLibrary() {
 }
 
 function* queryMoviesFromMovieLibrary() {
-   yield put(slice.actions._reset());
+   yield put(slice.actions.reset());
 
    const response = yield recommendations();
 

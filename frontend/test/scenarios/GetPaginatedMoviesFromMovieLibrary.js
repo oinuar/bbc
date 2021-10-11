@@ -137,7 +137,7 @@ it('retrieves has more results', () => {
    expect(hasMoreResults(state)).toEqual(false);
 });
 
-it('acts user scrolls down the movie list', function*() {
+it('acts user scrolls down the movie list', function* actsUserScrollsDownTheMovieList() {
    yield saga();
 
    expect(takeLatest).toHaveBeenCalled();

@@ -151,10 +151,10 @@ describe('reduce query movies from a movie library', () => {
    });
 });
 
-it('reduces _reset', () => {
+it('reduces reset', () => {
    const state = {};
 
-   slice.caseReducers._reset(state);
+   slice.caseReducers.reset(state);
 
    expect(state).toEqual({
       offset: 0,
@@ -191,7 +191,7 @@ it('retrieves has more results', () => {
    expect(hasMoreResults(state)).toEqual(false);
 });
 
-it('acts user requests more movie recommendations', function*() {
+it('acts user requests more movie recommendations', function* actsUserRequestsMoreMovieRecommendations() {
    yield saga();
 
    expect(takeLatest).toHaveBeenCalled();
@@ -218,7 +218,7 @@ it('acts user requests more movie recommendations', function*() {
    expect(put).toHaveBeenCalledWith(slice.actions['query next chunk of movies from a movie library'](movies));
 });
 
-it('acts add the liked movie to the user preference & remove the liked movie from the user preference', function*() {
+it('acts add the liked movie to the user preference & remove the liked movie from the user preference', function* actsLikeOrDislike() {
    yield saga();
 
    expect(takeLatest).toHaveBeenCalled();
@@ -244,7 +244,7 @@ it('acts add the liked movie to the user preference & remove the liked movie fro
 
    yield queryMoviesFromMovieLibrary();
 
-   expect(put).toHaveBeenCalledWith(slice.actions._reset());
+   expect(put).toHaveBeenCalledWith(slice.actions.reset());
    expect(api.post).toHaveBeenCalledWith('movie/recommendations', {}, { headers: { Authorization: 'Bearer unit test access token' }, params: { offset, limit } });
    expect(put).toHaveBeenCalledWith(slice.actions['query movies from a movie library'](movies));
 });

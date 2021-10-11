@@ -65,7 +65,7 @@ describe('act on user requests an access token', () => {
       yield generateJwtToken();
    }
 
-   it('uses existing token', function*() {
+   it('uses existing token', function* useExistingToken() {
       const state = {
          [slice.name]: {
             token: 'unit test token',
@@ -77,7 +77,7 @@ describe('act on user requests an access token', () => {
       expect(put).toHaveBeenCalledWith(slice.actions['generate a JWT token'](state[slice.name].token));
    });
 
-   it('generates a new token', function*() {
+   it('generates a new token', function* generateNewToken() {
       const api = useApi();
 
       api.post.mockReturnValue(Promise.resolve({
@@ -97,7 +97,7 @@ describe('act on user requests an access token', () => {
    });
 });
 
-it('obtains an access token', function*() {
+it('obtains an access token', function* obtainsAnAccessToken() {
    const state = {
       [slice.name]: {
          token: 'unit test token',

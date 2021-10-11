@@ -108,7 +108,7 @@ it('retrieves like', () => {
    expect(getLike('1', state)).toEqual(true);
 });
 
-it('acts user likes a movie', function*() {
+it('acts user likes a movie', function* actsUserLikesMovie() {
    yield saga();
 
    expect(takeLatest).toHaveBeenCalled();
@@ -125,7 +125,7 @@ it('acts user likes a movie', function*() {
    expect(put).toHaveBeenCalledWith(slice.actions['add the liked movie to the user preference']('1'));
 });
 
-it('acts user dislikes a movie', function*() {
+it('acts user dislikes a movie', function* actsUserDislikesMovie() {
    yield saga();
 
    expect(takeLatest).toHaveBeenCalled();

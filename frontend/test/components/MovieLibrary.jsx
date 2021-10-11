@@ -24,7 +24,11 @@ jest.mock('@/components', () => ({
 
 jest.mock('@/components/MovieCard', () => ({
    __esModule: true,
-   default: props => <p>movie card: {JSON.stringify(props)}</p>,
+   default: props => (
+      <p>
+         movie card: {JSON.stringify(props)}
+      </p>
+   ),
 }));
 
 jest.mock('@/scenarios/GetPaginatedMoviesFromMovieLibrary', () => ({
@@ -77,7 +81,7 @@ it('hooks infinite scroll', () => {
    useDispatch.mockReturnValue(dispatch);
    isLoading.mockReturnValue(loading);
    hasMoreResults.mockReturnValue(hasNextPage);
-   useAction.mockImplementation(_ => onLoadMore);
+   useAction.mockImplementation(() => onLoadMore);
 
    renderer.create(<MovieLibrary />);
 
